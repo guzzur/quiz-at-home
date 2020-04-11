@@ -18,6 +18,10 @@ h1 {
   color: #ffaf12;
   text-decoration: none;
 }
+.anchor:hover {
+  color: #ffda91;
+  text-decoration: none;
+}
 
 .prepare-timer {
   font-size: 10rem;
@@ -27,11 +31,17 @@ h1 {
   color: #ff5e6c;
   font-family: 'Lobster', cursive;
 }
+.timer:hover {
+  color: #ff848e;
+}
 
 .skip {
   opacity: 0.2;
   letter-spacing: -3px;
   cursor: pointer;
+}
+.skip:hover {
+  opacity: 0.5;
 }
 
 .App {
