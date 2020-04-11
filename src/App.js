@@ -5,11 +5,15 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import chesh02 from './db/chesh02.txt';
 import chesh03 from './db/chesh03.txt';
+import euro13sh from './db/euro13sh.txt';
+import euro14sh from './db/euro14sh.txt';
 import euro15sh from './db/euro15sh.txt';
 
 const GAMES_LIST = {
   chesh02,
   chesh03,
+  euro13sh,
+  euro14sh,
   euro15sh
 };
 
