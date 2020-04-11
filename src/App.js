@@ -8,18 +8,21 @@ import chesh03 from './db/chesh03.txt';
 import euro13sh from './db/euro13sh.txt';
 import euro14sh from './db/euro14sh.txt';
 import euro15sh from './db/euro15sh.txt';
+import more11 from './db/more11.txt';
+
 
 const GAMES_LIST = {
   chesh02,
   chesh03,
   euro13sh,
   euro14sh,
-  euro15sh
+  euro15sh,
+  more11
 };
 
 const TIMER_END_OFFSET = 4;
 const PREPARE_TIME = 3;
-const READ_TIME = 5;
+const READ_TIME = 3;
 const ANSWER_TIME = 60;
 const RIGHT_ANSWER_TIME = 0;
 
@@ -163,6 +166,55 @@ class App extends React.Component {
     }, 1000);
   }
 
+  renderTopic = () => {
+    const { currentTournament, currentQuestion } = this.state;
+    const { numOfQuestions } = currentTournament;
+
+    return (
+      <Col>
+        <h1>
+          {
+            currentQuestion > 1 &&
+            <span
+              className="mr-4 skip"
+              style={{ transform: "rotate(180deg)" }}
+              onClick={() => {
+                this.setState({
+                  status: statuses.read,
+                  currentQuestion: currentQuestion - 1,
+                  timeOver: false
+                }, () => this.runTimer('readTime', READ_TIME));
+              }}
+            >
+              &lt;&lt;
+            </span>
+          }
+          {
+            this.state.status === statuses.rightAnswer ?
+              `Ответ ${currentQuestion}/${numOfQuestions}` :
+              `Вопрос ${currentQuestion}/${numOfQuestions}`
+          }
+          {
+            currentQuestion < numOfQuestions &&
+            <span
+              className="ml-4 skip"
+              style={{ transform: "rotate(180deg)" }}
+              onClick={() => {
+                this.setState({
+                  status: statuses.read,
+                  currentQuestion: currentQuestion + 1,
+                  timeOver: false
+                }, () => this.runTimer('readTime', READ_TIME));
+              }}
+            >
+              &gt;&gt;
+            </span>
+          }
+        </h1>
+      </Col>
+    )
+  }
+
   render() {
     const {
       games,
@@ -254,7 +306,14 @@ class App extends React.Component {
               <Col className="prepare-timer timer">
               {
                 !this.state.timeOver ?
-                  <div>
+                  <div 
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      this.setState({
+                        prepareTime: 0
+                      });
+                    }}
+                  >
                     {this.state.prepareTime}
                   </div> :
                   <div className="anchor" onClick={() => {
@@ -282,49 +341,13 @@ class App extends React.Component {
         <Container className="App px-4" fluid>
           <Fragment>
             <Row className="py-4">
-              <Col>
-                <h1>
-                  {
-                    currentQuestion > 1 &&
-                    <span
-                      className="mr-4 skip"
-                      style={{ transform: "rotate(180deg)" }}
-                      onClick={() => {
-                        this.setState({
-                          status: statuses.read,
-                          currentQuestion: currentQuestion - 1,
-                          timeOver: false
-                        }, () => this.runTimer('readTime', READ_TIME));
-                      }}
-                    >
-                      &lt;&lt;
-                    </span>
-                  }
-                  Вопрос {currentQuestion}/{numOfQuestions}
-                  {
-                    currentQuestion < numOfQuestions &&
-                    <span
-                      className="ml-4 skip"
-                      style={{ transform: "rotate(180deg)" }}
-                      onClick={() => {
-                        this.setState({
-                          status: statuses.read,
-                          currentQuestion: currentQuestion + 1,
-                          timeOver: false
-                        }, () => this.runTimer('readTime', READ_TIME));
-                      }}
-                    >
-                      &gt;&gt;
-                    </span>
-                  }
-                </h1>
-              </Col>
+              { this.renderTopic() }
             </Row>
             <Row className="py-4">
               <Col>
                 {
                   !this.state.timeOver ?
-                  <h1 className="pb-4 timer">
+                  <h1 className="pb-2 timer">
                     Читаем вопрос...
                   </h1> :
                   <h1 className="anchor pb-2" onClick={(e) => {
@@ -352,15 +375,21 @@ class App extends React.Component {
         <Container className="App px-4" fluid>
           <Fragment>
             <Row className="py-4">
-              <Col>
-                <h1>Вопрос {currentQuestion}/{numOfQuestions}</h1>
-              </Col>
+              { this.renderTopic() }
             </Row>
             <Row className="py-4">
               <Col>
                 {
                   !this.state.timeOver ?
-                  <h1 className="pb-4 timer">
+                  <h1
+                    className="pb-2 timer"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      this.setState({
+                        answerTime: 0
+                      });
+                    }}
+                  >
                     {this.state.answerTime}
                   </h1> :
                   <h1 className="anchor pb-2" onClick={() => {
@@ -388,15 +417,13 @@ class App extends React.Component {
         <Container className="App px-4" fluid>
           <Fragment>
             <Row className="py-4">
-              <Col>
-                <h1>Ответ {currentQuestion}/{numOfQuestions}</h1>
-              </Col>
+              { this.renderTopic() }
             </Row>
             <Row className="py-4">
               <Col>
                 {
                   !this.state.timeOver ?
-                  <h1 className="pb-4 timer">
+                  <h1 className="pb-2 timer">
                     {this.state.rightAnswerTime}
                   </h1> :
                   <h1 className="anchor pb-2" onClick={() => {
@@ -410,10 +437,11 @@ class App extends React.Component {
                     ▶
                   </h1>
                 }
-                <h3 dangerouslySetInnerHTML={{ __html: question.answer }} />
+                <h3 dangerouslySetInnerHTML={{ __html: question.question }} />
+                <h3 className="answer pt-4" dangerouslySetInnerHTML={{ __html: question.answer }} />
                 {
                   question.comment &&
-                    <h5 className="py-4" dangerouslySetInnerHTML={{ __html: question.comment }} />
+                    <h5 className="answer py-4" dangerouslySetInnerHTML={{ __html: question.comment }} />
                 }
               </Col>
             </Row>
@@ -433,7 +461,7 @@ class App extends React.Component {
             <Row className="py-4">
               <Col className="prepare-timer timer">
                 <a href="/" className="anchor">
-                  <span role="img" aria-label="">🔄</span>
+                  Ещё!
                 </a>
               </Col>
             </Row>

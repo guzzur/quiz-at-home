@@ -3,7 +3,12 @@ body {
   color: #ffffff;
 }
 
-h5 {
+h1 {
+  font-size: 3rem;
+  padding-bottom: 0.5rem;
+}
+
+.answer {
   color: #b2cffc;
 }
 
@@ -11,9 +16,6 @@ h5 {
   cursor: pointer;
   color: #ffaf12;
   text-decoration: none;
-}
-.anchor:hover {
-  text-decoration: dotted;
 }
 
 .prepare-timer {
