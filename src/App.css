@@ -3,6 +3,10 @@ body {
   color: #ffffff;
 }
 
+img {
+  max-width: 100%;
+}
+
 h1 {
   font-size: 3rem;
   padding-bottom: 0.5rem;
