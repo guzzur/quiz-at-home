@@ -19,9 +19,9 @@ const GAMES_LIST = {
 
 const TIMER_END_OFFSET = 4;
 const PREPARE_TIME = 3;
-const READ_TIME = 3;
-const ANSWER_TIME = 3;
-const RIGHT_ANSWER_TIME = 3;
+const READ_TIME = 5;
+const ANSWER_TIME = 60;
+const RIGHT_ANSWER_TIME = 0;
 
 const log = console.log;
 const error = console.error;
