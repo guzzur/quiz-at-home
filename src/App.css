@@ -1,0 +1,28 @@
+body {
+  background-color: #34558b;
+  color: #ffffff;
+}
+
+.anchor {
+  cursor: pointer;
+  color: #ffaf12;
+  text-decoration: none;
+}
+.anchor:hover {
+  text-decoration: dotted;
+}
+
+.prepare-timer {
+  font-size: 10rem;
+}
+
+.timer {
+  color: #ff5e6c;
+}
+
+.App {
+  height: 100vh;
+  max-width: 800px;
+  text-align: center;
+  font-family: 'Lobster', cursive;
+}
