@@ -168,7 +168,8 @@ class App extends React.Component {
 
   renderTopic = () => {
     const { currentTournament, currentQuestion } = this.state;
-    const { numOfQuestions } = currentTournament;
+    let { numOfQuestions } = currentTournament;
+    numOfQuestions = numOfQuestions || 0;
 
     return (
       <Col>
