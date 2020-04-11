@@ -5,12 +5,18 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import chesh02 from './db/chesh02.txt';
 import chesh03 from './db/chesh03.txt';
-const GAMES_LIST = { chesh02, chesh03 };
+import euro15sh from './db/euro15sh.txt';
+
+const GAMES_LIST = {
+  chesh02,
+  chesh03,
+  euro15sh
+};
 
 const TIMER_END_OFFSET = 4;
 const PREPARE_TIME = 3;
 const READ_TIME = 3;
-const ANSWER_TIME = 60;
+const ANSWER_TIME = 3;
 const RIGHT_ANSWER_TIME = 3;
 
 const log = console.log;
@@ -54,15 +60,24 @@ class App extends React.Component {
       .then(text  => {
         let tournamentId;
         let questionId;
+        let imgs = [];
         let currentlyReading = '';
         let updatingObj = games[game] = {};
         const lines = text.split('\n');
 
         Promise.all(
           lines.map(line => {
+            line = line.trim();
             if (line === '') {
               currentlyReading = '';
             } else {
+              if(line.match(/(pic: [0-9]*.jpg)/)) {
+                updatingObj[currentlyReading] +=
+                  '<br /><img src="https://db.chgk.info/images/db/' + 
+                  line.replace('(pic: ', '').replace(')', '') +
+                  '" alt="" class="py-4"/><br />';
+                line = ' '
+              }
               if(currentlyReading !== '')
                 updatingObj[currentlyReading] += ' ' + line;
               
@@ -264,7 +279,41 @@ class App extends React.Component {
           <Fragment>
             <Row className="py-4">
               <Col>
-                <h1>Вопрос {currentQuestion}/{numOfQuestions}</h1>
+                <h1>
+                  {
+                    currentQuestion > 1 &&
+                    <span
+                      className="mr-4 skip"
+                      style={{ transform: "rotate(180deg)" }}
+                      onClick={() => {
+                        this.setState({
+                          status: statuses.read,
+                          currentQuestion: currentQuestion - 1,
+                          timeOver: false
+                        }, () => this.runTimer('readTime', READ_TIME));
+                      }}
+                    >
+                      &lt;&lt;
+                    </span>
+                  }
+                  Вопрос {currentQuestion}/{numOfQuestions}
+                  {
+                    currentQuestion < numOfQuestions &&
+                    <span
+                      className="ml-4 skip"
+                      style={{ transform: "rotate(180deg)" }}
+                      onClick={() => {
+                        this.setState({
+                          status: statuses.read,
+                          currentQuestion: currentQuestion + 1,
+                          timeOver: false
+                        }, () => this.runTimer('readTime', READ_TIME));
+                      }}
+                    >
+                      &gt;&gt;
+                    </span>
+                  }
+                </h1>
               </Col>
             </Row>
             <Row className="py-4">
@@ -283,9 +332,7 @@ class App extends React.Component {
                     ▶
                   </h1>
                 }
-                <h3>
-                  {question.question}
-                </h3>
+                <h3 dangerouslySetInnerHTML={{ __html: question.question }} />
               </Col>
             </Row>
           </Fragment>
@@ -321,9 +368,7 @@ class App extends React.Component {
                     ▶
                   </h1>
                 }
-                <h3>
-                  {question.question}
-                </h3>
+                <h3 dangerouslySetInnerHTML={{ __html: question.question }} />
               </Col>
             </Row>
           </Fragment>
@@ -361,11 +406,10 @@ class App extends React.Component {
                     ▶
                   </h1>
                 }
-                <h3>
-                  {question.answer}
-                </h3>
+                <h3 dangerouslySetInnerHTML={{ __html: question.answer }} />
                 {
-                  question.comment && <h5 className="py-4">{question.comment}</h5>
+                  question.comment &&
+                    <h5 className="py-4" dangerouslySetInnerHTML={{ __html: question.comment }} />
                 }
               </Col>
             </Row>
