@@ -7,13 +7,16 @@ import chesh02 from './db/chesh02.txt';
 import chesh03 from './db/chesh03.txt';
 const GAMES_LIST = { chesh02, chesh03 };
 
-const PREPARE_TIME = 120;
-const READ_TIME = 15;
+const TIMER_END_OFFSET = 4;
+const PREPARE_TIME = 3;
+const READ_TIME = 3;
 const ANSWER_TIME = 60;
-const RIGHT_ANSWER_TIME = 15;
+const RIGHT_ANSWER_TIME = 3;
 
 const log = console.log;
 const error = console.error;
+
+const timerEndBeep = new Audio('/sounds/Clock-alarm-electronic-beep.mp3');
 
 const statuses = {
   selectGame: 'SELECT_GAME',
@@ -70,7 +73,7 @@ class App extends React.Component {
               } else if (line === 'Тур:') {
                 if (tournamentId > 0) {
                   games[game]['tournament_' + tournamentId]['numOfQuestions'] = questionId;
-                  games[game]['numOfTournaments'] = tournamentId+1;
+                  games[game]['numOfTournaments'] = tournamentId + 1;
                 }
                 tournamentId++;
                 questionId = 0;
@@ -107,7 +110,7 @@ class App extends React.Component {
       error("Error loading game", gameId);
     }
 
-    for (let i = 1; i < numOfTournaments+1; i++) {
+    for (let i = 1; i < numOfTournaments + 1; i++) {
       tournaments.push(game['tournament_' + i]);
     }
 
@@ -118,12 +121,19 @@ class App extends React.Component {
     this.loadGames();
   }
 
-  runTimer = (timerState, timerDefault) => {
+  runTimer = (timerState, timerDefault, soundBeep = false) => {
     const timer = setInterval(() => {
       this.setState({
         [timerState]: this.state[timerState] - 1,
         timeOver: false
       });
+      if(
+        soundBeep &&
+        this.state[timerState] <= TIMER_END_OFFSET &&
+        this.state[timerState] >= 1
+      ) {
+        timerEndBeep.play();
+      }
       if (this.state[timerState] <= 0) {
         clearInterval(timer);
         this.setState({
@@ -264,11 +274,11 @@ class App extends React.Component {
                   <h1 className="pb-4 timer">
                     Читаем вопрос...
                   </h1> :
-                  <h1 className="anchor pb-2" onClick={() => {
+                  <h1 className="anchor pb-2" onClick={(e) => {
                     this.setState({
                       status: statuses.answer,
                       timeOver: false
-                    }, () => this.runTimer('answerTime', ANSWER_TIME));
+                    }, () => this.runTimer('answerTime', ANSWER_TIME, true));
                   }}>
                     ▶
                   </h1>

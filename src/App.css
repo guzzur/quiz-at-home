@@ -3,6 +3,10 @@ body {
   color: #ffffff;
 }
 
+h5 {
+  opacity: 0.5;
+}
+
 .anchor {
   cursor: pointer;
   color: #ffaf12;
