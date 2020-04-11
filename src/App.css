@@ -6,6 +6,7 @@ body {
 h1 {
   font-size: 3rem;
   padding-bottom: 0.5rem;
+  font-family: 'Lobster', cursive;
 }
 
 .answer {
@@ -24,6 +25,7 @@ h1 {
 
 .timer {
   color: #ff5e6c;
+  font-family: 'Lobster', cursive;
 }
 
 .skip {
@@ -36,5 +38,6 @@ h1 {
   height: 100vh;
   max-width: 800px;
   text-align: center;
-  font-family: 'Lobster', cursive;
+  /* font-family: 'Rubik', sans-serif; */
+  font-family: 'Scada', sans-serif;
 }
