@@ -3,21 +3,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import chesh02 from './db/chesh02.txt';
-import chesh03 from './db/chesh03.txt';
-import euro13sh from './db/euro13sh.txt';
-import euro14sh from './db/euro14sh.txt';
-import euro15sh from './db/euro15sh.txt';
-import more11 from './db/more11.txt';
+// import chesh02 from './db/chesh02.txt';
+// import chesh03 from './db/chesh03.txt';
+// import euro13sh from './db/euro13sh.txt';
+// import euro14sh from './db/euro14sh.txt';
+// import euro15sh from './db/euro15sh.txt';
+// import more11 from './db/more11.txt';
+import q01 from './db/60sec01.txt';
 
 
 const GAMES_LIST = {
-  chesh02,
-  chesh03,
-  euro13sh,
-  euro14sh,
-  euro15sh,
-  more11
+  q01
 };
 
 const TIMER_END_OFFSET = 4;
@@ -93,17 +89,13 @@ class App extends React.Component {
                 currentlyReading = 'gameTitle'
                 updatingObj[currentlyReading] = '';
               } else if (line === 'Тур:') {
-                if (tournamentId > 0) {
-                  games[game]['tournament_' + tournamentId]['numOfQuestions'] = questionId;
-                  games[game]['numOfTournaments'] = tournamentId + 1;
-                }
-                tournamentId++;
+                games[game]['numOfTournaments'] = ++tournamentId;
                 questionId = 0;
                 updatingObj = games[game]['tournament_' + tournamentId] = {};
                 currentlyReading = 'tournamentTitle'
                 updatingObj[currentlyReading] = '';
               } else if (line.match(/Вопрос [0-9]*:/)) {
-                questionId++;
+                games[game]['tournament_' + tournamentId]['numOfQuestions'] = ++questionId;
                 updatingObj = 
                   games[game]['tournament_' + tournamentId]['question_' + questionId] = {
                     question: '', answer: '', comment: ''
