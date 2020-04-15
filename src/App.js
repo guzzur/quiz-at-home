@@ -2,18 +2,15 @@ import React, { Fragment } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Container, Row, Col } from 'react-bootstrap';
-
-// import chesh02 from './db/chesh02.txt';
-// import chesh03 from './db/chesh03.txt';
-// import euro13sh from './db/euro13sh.txt';
-// import euro14sh from './db/euro14sh.txt';
-// import euro15sh from './db/euro15sh.txt';
-// import more11 from './db/more11.txt';
 import q01 from './db/60sec01.txt';
+import q02 from './db/prnazi18.txt';
 
+const log = console.log;
+const error = console.error;
 
 const GAMES_LIST = {
-  q01
+  q01,
+  q02
 };
 
 const TIMER_END_OFFSET = 4;
@@ -21,9 +18,6 @@ const PREPARE_TIME = 3;
 const READ_TIME = 3;
 const ANSWER_TIME = 60;
 const RIGHT_ANSWER_TIME = 0;
-
-const log = console.log;
-const error = console.error;
 
 const timerEndBeep = new Audio('/sounds/Clock-alarm-electronic-beep.mp3');
 
@@ -81,8 +75,11 @@ class App extends React.Component {
                   '" alt="" class="py-4"/><br />';
                 line = ' '
               }
-              if(currentlyReading !== '')
-                updatingObj[currentlyReading] += ' ' + line;
+              if(currentlyReading !== '') {
+                updatingObj[currentlyReading] += ' ' + line
+                  .replace('<раздатка>', '<div class="pre">')
+                  .replace('</раздатка>', '</div>');
+              }
               
               if (line === 'Чемпионат:') {
                 tournamentId = 0;
