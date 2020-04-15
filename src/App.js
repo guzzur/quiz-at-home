@@ -14,11 +14,12 @@ const GAMES_LIST = {
 };
 
 const TIMER_END_OFFSET = 4;
-const PREPARE_TIME = 3;
-const READ_TIME = 3;
+const PREPARE_TIME = 60;
+const READ_TIME = 2;
 const ANSWER_TIME = 60;
 const RIGHT_ANSWER_TIME = 0;
 
+let timer;
 const timerEndBeep = new Audio('/sounds/Clock-alarm-electronic-beep.mp3');
 
 const statuses = {
@@ -133,7 +134,10 @@ class App extends React.Component {
   }
 
   runTimer = (timerState, timerDefault, soundBeep = false) => {
-    const timer = setInterval(() => {
+    if(timer) {
+      clearInterval(timer);
+    }
+    timer = setInterval(() => {
       this.setState({
         [timerState]: this.state[timerState] - 1,
         timeOver: false
